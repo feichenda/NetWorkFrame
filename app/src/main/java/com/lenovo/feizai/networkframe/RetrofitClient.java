@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableSource;
 import io.reactivex.rxjava3.core.ObservableTransformer;
+import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.ConnectionPool;
@@ -83,17 +84,20 @@ public class RetrofitClient {
         }
 
         public Builder setUrl(String url) {
-            mUrl = url;
+            if (!url.isEmpty())
+                mUrl = url;
             return this;
         }
 
         public Builder setHeaders(Map<String, String> headers) {
-            mHeaders = headers;
+            if (!headers.isEmpty())
+                mHeaders = headers;
             return this;
         }
 
         public Builder setTimeOut(int timeOut) {
-            mTimeOut = timeOut;
+            if (timeOut>0)
+                mTimeOut = timeOut;
             return this;
         }
 
@@ -101,10 +105,6 @@ public class RetrofitClient {
         public Builder setConnectionPool(int maxIdleConnections, long keepAliveDuration, TimeUnit timeUnit) {
             connectionPool = new ConnectionPool(maxIdleConnections, keepAliveDuration, timeUnit);
             return this;
-        }
-
-        public void destory() {
-            this.api = null;
         }
 
         /**
@@ -136,13 +136,22 @@ public class RetrofitClient {
         }
     }
 
-    public RetrofitClient(Context context) {
+    private RetrofitClient(Context context) {
         this(new Builder(context));
     }
 
     private RetrofitClient(Builder builder) {
         api = builder.api;
         schedulersTransformer = builder.schedulersTransformer;
+    }
+
+    public void destory() {
+        this.api = null;
+        this.schedulersTransformer = null;
+    }
+
+    public void getAllUserList(Observer<?> observer) {
+        api.getAllUserList().compose(schedulersTransformer).subscribe(observer);
     }
 
 }
