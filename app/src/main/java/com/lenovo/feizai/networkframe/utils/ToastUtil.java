@@ -28,11 +28,11 @@ public class ToastUtil {
     }
 
     public void showToast(CharSequence content) {
-        Toast.makeText(mContext, content, Toast.LENGTH_SHORT);
+        Toast.makeText(mContext, content, Toast.LENGTH_SHORT).show();
     }
 
     public void showToast(CharSequence content, Integer duration) {
-        Toast.makeText(mContext, content, duration);
+        Toast.makeText(mContext, content, duration).show();
     }
 
 }
