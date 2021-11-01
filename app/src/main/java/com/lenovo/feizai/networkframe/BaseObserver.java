@@ -21,7 +21,7 @@ public abstract class BaseObserver<T> implements Observer<T> {
 
     public BaseObserver(Context context){
         mContext=context;
-        toast = ToastUtil.getInstance(context);
+        toast = ToastUtil.getInstance(mContext);
     }
 
     @Override
