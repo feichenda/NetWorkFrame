@@ -2,25 +2,31 @@ package com.lenovo.feizai.networkframe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.lenovo.feizai.networkframe.entity.User;
+import com.lenovo.feizai.networkframe.entity.Index;
+import com.lenovo.feizai.networkframe.entity.Value;
+import com.lenovo.feizai.networkframe.entity.Weather;
+import com.lenovo.feizai.networkframe.entity.Weather3HoursDetailsInfo;
 import com.lenovo.feizai.networkframe.utils.ToastUtil;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
     private RetrofitClient client;
-    private RetrofitClient client1;
     private ToastUtil toast;
     private EditText account;
     private EditText password;
     private Button login;
     private Button register;
+    private Context context;
 
 
     @Override
@@ -28,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findView();
+        context = this;
     }
 
     private void findView() {
@@ -42,13 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         toast = ToastUtil.getInstance(this);
         client = new RetrofitClient.Builder(this)
-                .setUrl("http://172.21.58.82:8080/Parking_war/")
-                .setTimeOut(2)
-                .setConnectionPool(10, 10, TimeUnit.SECONDS)
-                .builder();
-        client1 = new RetrofitClient.Builder(this)
-                .setUrl("http://172.21.58.82:8080/Parking/")
-                .setTimeOut(2)
+                .setTimeOut(20)
                 .setConnectionPool(10, 10, TimeUnit.SECONDS)
                 .builder();
     }
@@ -56,43 +57,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toast.showToast("login");
-                client.getAllUserList(new BaseObserver<User>(MainActivity.this) {
-                    @Override
-                    protected void showDialog() {
-
-                    }
-
-                    @Override
-                    protected void hideDialog() {
-
-                    }
-
-                    @Override
-                    protected void successful(User user) {
-
-                    }
-
-                    @Override
-                    protected void defeated(User user) {
-
-                    }
-
-                    @Override
-                    protected void onError(ExceptionHandle.ResponeThrowable e) {
-
-                    }
-                });
-            }
-        });
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toast.showToast("regitster");
-                client1.getAllUserList(new BaseObserver<User>(MainActivity.this) {
+                client.getWeatherByCityId("101280301", new BaseObserver<BaseModel<Value>>(context) {
                     @Override
                     protected void showDialog() {
 
@@ -104,18 +72,39 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    protected void successful(User user) {
+                    protected void successful(BaseModel<Value> valueBaseModel) {
+                        List<Value> values = valueBaseModel.getValue();
+                        for (Value value : values) {
+                            toast.showToast(value.toString());
+                            Log.d("weather", value.getCity());
+                            Log.d("weather", value.getCityid());
+                            Log.d("weather", value.getProvinceName());
+                            Log.d("weather", value.getRealtime().toString());
+                            for (Index index : value.getIndexes()) {
+                                Log.d("weather", index.toString());
+                            }
+
+                            Log.d("weather", value.getWeatherDetailsInfo().getPublishTime());
+                            for (Weather3HoursDetailsInfo weather3HoursDetailsInfo : value.getWeatherDetailsInfo().getWeather3HoursDetailsInfos()) {
+                                Log.d("weather", weather3HoursDetailsInfo.toString());
+                            }
+                            Log.d("weather", value.getPm25().toString());
+                            for (Weather weather : value.getWeathers()) {
+                                Log.d("weather", weather.toString());
+                            }
+
+                        }
 
                     }
 
                     @Override
-                    protected void defeated(User user) {
-
+                    protected void defeated(BaseModel<Value> valueBaseModel) {
+                        toast.showToast(valueBaseModel.getCode().toString());
                     }
 
                     @Override
                     protected void onError(ExceptionHandle.ResponeThrowable e) {
-
+                        toast.showToast(e.getMessage());
                     }
                 });
             }
