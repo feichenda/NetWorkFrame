@@ -1,28 +1,26 @@
 package com.lenovo.feizai.networkframe.entity;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
  * Author:feizai
- * Date:2021/11/17-0017 下午 02:31:39
+ * Date:2021/11/17-0017 下午 02:43:42
  * Describe:
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Weather {
-    private String date;
-    private String img;
-    private String sun_down_time;
-    private String sun_rise_time;
-    private String temp_day_c;
-    private String temp_day_f;
-    private String temp_night_c;
-    private String temp_night_f;
-    private String wd;
-    private String weather;
-    private String week;
-    private String ws;
+    private String city;
+    private String cityid;
+    private List<Index> indexes;
+    private Pm25 pm25;
+    private String provinceName;
+    private Realtime realtime;
+    private WeatherDetailsInfo weatherDetailsInfo;
+    private List<WeatherInfo> weathers;
 }
