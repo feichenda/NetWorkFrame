@@ -2,6 +2,8 @@ package com.lenovo.feizai.networkframe;
 
 import android.content.Context;
 
+import com.lenovo.feizai.networkframe.entity.User;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -150,8 +152,12 @@ public class RetrofitClient {
         this.schedulersTransformer = null;
     }
 
-    public void getAllUserList(Observer<?> observer) {
-        api.getAllUserList().compose(schedulersTransformer).subscribe(observer);
+    public void selectCustomerByUsername(String name, Observer<?> observer) {
+        api.selectCustomerByUsername(name).compose(schedulersTransformer).subscribe(observer);
+    }
+
+    public void getWeatherByCityId(String cityIds, Observer<?> observer) {
+        api.getWeatherByCityId(cityIds).compose(schedulersTransformer).subscribe(observer);
     }
 
 }
