@@ -2,8 +2,6 @@ package com.lenovo.feizai.networkframe;
 
 import android.content.Context;
 
-import com.lenovo.feizai.networkframe.entity.User;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -27,17 +25,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @Date 2021年10月30日 0030  下午 10:46:09
  * @Explain
  */
-public class RetrofitClient {
+public class RetrofitClient<T> {
 
     private RequestAPI api;
     private ObservableTransformer schedulersTransformer;
+    private T mApi;
 
-    public static final class Builder {
+    public static final class Builder<T> {
         private RequestAPI api;
         private Retrofit retrofit;
         private Retrofit.Builder retrofitBuilder;
         private OkHttpClient okHttpClient;
         private OkHttpClient.Builder okHttpClientBuilder;
+
+        private Class<T> mService;
+        private T mApi;
 
         private Context mContext;
         private String mUrl;
@@ -98,8 +100,14 @@ public class RetrofitClient {
         }
 
         public Builder setTimeOut(int timeOut) {
-            if (timeOut>0)
+            if (timeOut > 0)
                 mTimeOut = timeOut;
+            return this;
+        }
+
+        public Builder setServiceApi(Class<T> service) {
+            if (service != null)
+                mService = service;
             return this;
         }
 
@@ -132,6 +140,10 @@ public class RetrofitClient {
                     .baseUrl(mUrl)
                     .build();
             if (api == null) {
+                if (mService != null && mApi ==null) {
+                    mApi = create(mService);
+//                    api = create(RequestAPI.class);
+                }
                 api = create(RequestAPI.class);
             }
             return new RetrofitClient(this);
@@ -144,11 +156,17 @@ public class RetrofitClient {
 
     private RetrofitClient(Builder builder) {
         api = builder.api;
+        mApi = (T) builder.mApi;
         schedulersTransformer = builder.schedulersTransformer;
+    }
+
+    public T getmApi() {
+        return mApi;
     }
 
     public void destory() {
         this.api = null;
+        this.mApi = null;
         this.schedulersTransformer = null;
     }
 
@@ -158,6 +176,8 @@ public class RetrofitClient {
 
     public void getWeatherByCityId(String cityIds, Observer<?> observer) {
         api.getWeatherByCityId(cityIds).compose(schedulersTransformer).subscribe(observer);
+        ((MyRequestAPI) mApi).getWeatherByCityId(cityIds).compose(schedulersTransformer).subscribe(observer);
+//        mApi.getWeatherByCityId(cityIds).compose(schedulersTransformer).subscribe(observer);
     }
 
 }
