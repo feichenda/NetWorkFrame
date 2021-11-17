@@ -15,9 +15,7 @@ import com.lenovo.feizai.networkframe.entity.Weather;
 import com.lenovo.feizai.networkframe.entity.Weather3HoursDetailsInfo;
 import com.lenovo.feizai.networkframe.utils.ToastUtil;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,10 +48,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         toast = ToastUtil.getInstance(this);
-        client = new RetrofitClient.Builder<MyRequestAPI>(this)
-                .setServiceApi(MyRequestAPI.class)
-                .setTimeOut(10)
-                .setConnectionPool(100, 100, TimeUnit.SECONDS)
+        client = new RetrofitClient.Builder(this)
+                .setTimeOut(20)
+                .setConnectionPool(10, 10, TimeUnit.SECONDS)
                 .builder();
     }
 
