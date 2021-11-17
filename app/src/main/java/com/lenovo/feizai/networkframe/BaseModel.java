@@ -16,7 +16,9 @@ import lombok.NoArgsConstructor;
 public class BaseModel<T> {
     private Integer code;//默认成功的时候为200
     private String msg;
+    private String message;
     private T data;
     private List<T> datas;
+    private List<T> value;
 }
 
