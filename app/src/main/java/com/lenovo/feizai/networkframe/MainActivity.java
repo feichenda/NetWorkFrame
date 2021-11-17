@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.lenovo.feizai.networkframe.entity.Index;
+import com.lenovo.feizai.networkframe.entity.Value;
 import com.lenovo.feizai.networkframe.entity.Weather;
-import com.lenovo.feizai.networkframe.entity.WeatherInfo;
 import com.lenovo.feizai.networkframe.entity.Weather3HoursDetailsInfo;
 import com.lenovo.feizai.networkframe.utils.ToastUtil;
 
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                client.getWeatherByCityId("101280301", new BaseObserver<BaseModel<Weather>>(context) {
+                client.getWeatherByCityId("101280301", new BaseObserver<BaseModel<Value>>(context) {
                     @Override
                     protected void showDialog() {
 
@@ -75,25 +75,25 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    protected void successful(BaseModel<Weather> weatherBaseModel) {
-                        List<Weather> weathers = weatherBaseModel.getValue();
-                        for (Weather weather : weathers) {
-                            toast.showToast(weather.toString());
-                            Log.d("weather", weather.getCity());
-                            Log.d("weather", weather.getCityid());
-                            Log.d("weather", weather.getProvinceName());
-                            Log.d("weather", weather.getRealtime().toString());
-                            for (Index index : weather.getIndexes()) {
+                    protected void successful(BaseModel<Value> valueBaseModel) {
+                        List<Value> values = valueBaseModel.getValue();
+                        for (Value value : values) {
+                            toast.showToast(value.toString());
+                            Log.d("weather", value.getCity());
+                            Log.d("weather", value.getCityid());
+                            Log.d("weather", value.getProvinceName());
+                            Log.d("weather", value.getRealtime().toString());
+                            for (Index index : value.getIndexes()) {
                                 Log.d("weather", index.toString());
                             }
 
-                            Log.d("weather", weather.getWeatherDetailsInfo().getPublishTime());
-                            for (Weather3HoursDetailsInfo weather3HoursDetailsInfo : weather.getWeatherDetailsInfo().getWeather3HoursDetailsInfos()) {
+                            Log.d("weather", value.getWeatherDetailsInfo().getPublishTime());
+                            for (Weather3HoursDetailsInfo weather3HoursDetailsInfo : value.getWeatherDetailsInfo().getWeather3HoursDetailsInfos()) {
                                 Log.d("weather", weather3HoursDetailsInfo.toString());
                             }
-                            Log.d("weather", weather.getPm25().toString());
-                            for (WeatherInfo weatherInfo : weather.getWeathers()) {
-                                Log.d("weatherInfo", weatherInfo.toString());
+                            Log.d("weather", value.getPm25().toString());
+                            for (Weather weather : value.getWeathers()) {
+                                Log.d("weather", weather.toString());
                             }
 
                         }
@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    protected void defeated(BaseModel<Weather> weatherBaseModel) {
-                        toast.showToast(weatherBaseModel.getCode().toString());
+                    protected void defeated(BaseModel<Value> valueBaseModel) {
+                        toast.showToast(valueBaseModel.getCode().toString());
                     }
 
                     @Override

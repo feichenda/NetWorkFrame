@@ -1,7 +1,8 @@
 package com.lenovo.feizai.networkframe;
 
 import com.lenovo.feizai.networkframe.entity.Customer;
-import com.lenovo.feizai.networkframe.entity.Weather;
+import com.lenovo.feizai.networkframe.entity.User;
+import com.lenovo.feizai.networkframe.entity.Value;
 
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.GET;
@@ -22,5 +23,5 @@ public interface RequestAPI {
     Observable<BaseModel<Customer>> selectCustomerByUsername(@Query("name") String name);//你的参数，和接口参数保持一致
 
     @POST("app/weather/listWeather")
-    Observable<BaseModel<Weather>> getWeatherByCityId(@Query("cityIds") String cityIds);
+    Observable<BaseModel<Value>> getWeatherByCityId(@Query("cityIds") String cityIds);
 }
