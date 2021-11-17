@@ -26,14 +26,14 @@ public abstract class BaseObserver<T> implements Observer<T> {
 
     @Override
     public void onSubscribe(Disposable d) {
-        Log.v(TAG,"请求开始");
+        Log.i(TAG,"请求开始");
         showDialog();
     }
 
     @Override
     public void onNext(T t) {
         hideDialog();
-        Log.v(TAG,"请求到数据");
+        Log.i(TAG,"请求到数据");
         Integer code = 0;
         if (t instanceof BaseModel) {
             code = ((BaseModel) t).getCode();
@@ -50,7 +50,7 @@ public abstract class BaseObserver<T> implements Observer<T> {
 
     @Override
     public void onError(Throwable e) {
-        Log.v(TAG,"请求出错Error:"+e.getMessage());
+        Log.i(TAG,"请求出错Error:"+e.getMessage());
         ExceptionHandle.ResponeThrowable error;
         if (e instanceof ExceptionHandle.ResponeThrowable) {
             error = (ExceptionHandle.ResponeThrowable) e;
@@ -62,7 +62,7 @@ public abstract class BaseObserver<T> implements Observer<T> {
 
     @Override
     public void onComplete() {
-        Log.v(TAG,"请求完成");
+        Log.i(TAG,"请求完成");
         hideDialog();
     }
 
